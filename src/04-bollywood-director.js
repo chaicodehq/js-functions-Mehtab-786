@@ -45,13 +45,42 @@
  *   pricer("gold", true)  // => 200 * 1.5 * 1.3 = 390
  */
 export function createDialogueWriter(genre) {
-  // Your code here
+  if (genre !== 'action' && genre !== 'romance' && genre !== 'comedy' && genre != 'drama') return null;
+
+  return (hero, villain) => {
+    if (!hero || hero.length <= 0 || !villain || villain.length <= 0) return '...';
+
+    if (genre == 'action') return `${hero} says: 'Tujhe toh main dekh lunga, ${villain}!'`;
+    else if (genre == 'romance') return `${hero} whispers: '${villain}, tum mere liye sab kuch ho'`;
+    else if (genre == 'comedy') return `${hero} laughs: '${villain} bhai, kya kar rahe ho yaar!'`;
+    else if (genre == 'drama') return `${hero} cries: '${villain}, tune mera sab kuch cheen liya!'`;
+
+
+  }
 }
 
 export function createTicketPricer(basePrice) {
-  // Your code here
+  if (typeof basePrice === 'string' || Number.isNaN(basePrice) || basePrice <= 0) return null;
+  return function (seatType, isWeekend = false) {
+    let total = basePrice
+    if (seatType === 'gold') total = total * 1.5;
+    else if (seatType === 'silver') total = total * 1;
+    else if (seatType === 'platinum') total = total * 2;
+    else return null;
+
+    if (isWeekend) total  = total* 1.3;
+
+    return Math.round(total)
+  }
 }
 
 export function createRatingCalculator(weights) {
-  // Your code here
+  if (Array.isArray(weights) || weights === null || typeof weights != 'object' || typeof weights === 'string') return null;
+  return function (scores) {
+    let weightedAvg = 0;
+    for (let item in weights) {
+      weightedAvg = weightedAvg + (weights[item] * scores[item])
+    }
+    return Number(weightedAvg.toFixed(1))
+  }
 }
