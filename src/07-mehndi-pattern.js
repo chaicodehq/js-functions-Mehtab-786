@@ -53,21 +53,60 @@
  *   generatePattern(3)        // => ["*", "**", "***", "**", "*"]
  */
 export function repeatChar(char, n) {
-  // Your code here
+  if (typeof char !== 'string' || char === '') return "";
+  if (n <= 0) return "";
+  return char + repeatChar(char, n - 1)
 }
 
 export function sumNestedArray(arr) {
-  // Your code here
+  if (!Array.isArray(arr)) return 0;
+  if (arr.length <= 0) return 0;
+  let first = arr[0];
+  let rest = arr.slice(1,)
+  let value = null
+  if (typeof first == 'number') value = first
+  else if (Array.isArray(first)) value = sumNestedArray(first)
+  else value = 0
+
+  return value + sumNestedArray(rest)
 }
 
 export function flattenArray(arr) {
-  // Your code here
+  if (!Array.isArray(arr) || arr.length <= 0) return [];
+  let first = arr[0]
+  let rest = arr.slice(1)
+  let value = null;
+  if (Array.isArray(first)) value = flattenArray(first)
+  else value = [first]
+
+  return value.concat(flattenArray(rest))
 }
 
 export function isPalindrome(str) {
-  // Your code here
+  if (typeof str !== 'string') return false;
+  if (str.length <= 1) return true;
+
+  let first = str[0].toLowerCase()
+  let last = str[str.length - 1].toLowerCase()
+  let middle = str.slice(1, -1)
+  if (first === last) return isPalindrome(middle)
+  else return false
 }
 
 export function generatePattern(n) {
-  // Your code here
+  if (typeof n != "number" || !Number.isInteger(n) || n <= 0) return [];
+
+  function patt(n) {
+    if (n == 0) return [];
+    else return [...patt(n - 1), repeatChar('*', n)]
+  }
+  function patt2(n) {
+    if (n == 0) return [];
+    else return [repeatChar('*', n), ...patt2(n - 1)]
+  }
+
+  let res = patt(n);
+  res = [...res, ...patt2(n - 1)];
+
+  return res;
 }
