@@ -54,21 +54,63 @@
  *   // red and blue objects are UNCHANGED
  */
 export function mixColors(color1, color2) {
-  // Your code here
+  if (color1 === null || typeof color1 !== 'object' || typeof color1 == 'string' || Array.isArray(color1)) return null;
+  if (color2 === null || typeof color2 !== 'object' || typeof color2 == 'string' || Array.isArray(color2)) return null;
+
+  let rColor = Math.round((color1.r + color2.r)/ 2)
+  let gColor = Math.round((color1.g + color2.g)/ 2)
+  let bColor = Math.round((color1.b + color2.b)/ 2)
+
+  let newObj = { ...color1 }
+
+  newObj.name = `${color1.name}-${color2.name}`
+  newObj.r = rColor
+  newObj.g = gColor
+  newObj.b = bColor
+
+  return newObj
 }
 
 export function adjustBrightness(color, factor) {
-  // Your code here
+  if (color === null || typeof factor != 'number') return null;
+  let rClamp = Math.min(Math.round(color.r * factor), 255);
+  let gClamp = Math.min(Math.round(color.g * factor), 255);
+  let bClamp = Math.min(Math.round(color.b * factor), 255);
+
+  let newObj = { ...color };
+
+  newObj.r = rClamp;
+  newObj.g = gClamp;
+  newObj.b = bClamp;
+
+  return newObj;
 }
 
 export function addToPalette(palette, color) {
-  // Your code here
+  if (!Array.isArray(palette)) return [color];
+  if (color === null || color === undefined) return [...palette]
+
+  let newArr = Array(palette.length + 1)
+  newArr[palette.length] = color
+
+  return newArr
 }
 
 export function removeFromPalette(palette, colorName) {
-  // Your code here
+  if (!Array.isArray(palette)) return [];
+  let filteredArr = [...palette].filter(colorObj => colorObj.name != colorName);
+
+  return filteredArr;
 }
 
 export function mergePalettes(palette1, palette2) {
-  // Your code here
+  const p1 = Array.isArray(palette1) ? palette1 : [];
+  const p2 = Array.isArray(palette2) ? palette2 : [];
+
+  let newArr = [...p1]
+  for (let i = 0; i < p2.length; i++) {
+    const exist = newArr.some(item => item.name === p2[i].name)
+    if(!exist) newArr.push(p2[i])    
+  }
+  return newArr
 }
