@@ -6,7 +6,7 @@
  * lekin andar ka data PRIVATE rahe (bahar se directly access na ho sake).
  *
  * Function: createFestivalManager()
- *
+7 *
  * Returns an object with these PUBLIC methods:
  *
  *   - addFestival(name, date, type)
@@ -49,5 +49,52 @@
  *   mgr.getUpcoming("2025-01-01", 1); // => [{ name: "Republic Day", ... }]
  */
 export function createFestivalManager() {
-  // Your code here
+  let festiveObj = [];
+
+  return {
+    addFestival(name, date, type) {
+      if (name.trim() == "" || typeof date !== 'string') return -1;
+      if (type !== "religious" && type !== "national" && type !== "cultural") return -1;
+
+      for (let i = 0; i < festiveObj.length; i++) {
+        if (festiveObj[i].name === name) return -1;
+        else continue
+      };
+
+      festiveObj.push({ name, date, type })
+
+      return festiveObj.length
+    },
+    removeFestival(name) {
+      let ifFound = festiveObj.findIndex(festival => festival.name === name)
+      if (ifFound === -1) return false;
+
+      festiveObj.splice(ifFound, 1)
+
+      return true;
+    },
+    getAll() {
+      let festiveObjCopy = [...festiveObj];
+      return festiveObjCopy
+    },
+    getByType(type) {
+      let filteredObj = festiveObj.filter(festival => festival.type === type)
+      return filteredObj
+    },
+    getUpcoming(currentDate, n = 3) {
+      let obj = [];
+      const date1 = new Date(currentDate)
+      for (let i = 0; i < festiveObj.length; i++) {
+        const festiveDate = new Date(festiveObj[i].date)
+        if (festiveDate >= date1) obj.push(festiveObj[i])
+      }
+
+      obj.sort((a, b) => new Date(a.date) - new Date(b.date))
+
+      return obj.slice(0, n)
+    },
+    getCount() {
+      return festiveObj.length
+    }
+  }
 }
